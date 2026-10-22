@@ -1,0 +1,116 @@
+# ==============================================================================
+# VulnFollowUp - .gitignore
+# Proyecto Intermodular 2.º DAM (Curso 2026-2027) - Instituto Nebrija FP
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Archivos y carpetas del Sistema Operativo
+# ------------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# ------------------------------------------------------------------------------
+# Entornos de Desarrollo e IDEs (IntelliJ IDEA, VS Code, Eclipse, Android Studio)
+# ------------------------------------------------------------------------------
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.classpath
+.project
+.settings/
+*.sublime-project
+*.sublime-workspace
+.history/
+nbproject/private/
+build.properties
+
+# ------------------------------------------------------------------------------
+# Backend (Java, Maven, Gradle, Spring Boot / Servlets / JDBC)
+# ------------------------------------------------------------------------------
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# ------------------------------------------------------------------------------
+# Cliente de Escritorio / SPA Web (Node, React, Angular, Vue, Electron, Tauri)
+# ------------------------------------------------------------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+dist/
+dist-ssr/
+build/
+.cache/
+.parcel-cache/
+.turbo/
+.next/
+.nuxt/
+
+# ------------------------------------------------------------------------------
+# Aplicación Móvil (Android Studio, Gradle, Kotlin/Java)
+# ------------------------------------------------------------------------------
+.gradle/
+local.properties
+captures/
+.cxx/
+.externalNativeBuild/
+*.apk
+*.ap_
+*.aab
+*.dex
+output.json
+
+# ------------------------------------------------------------------------------
+# Logs, temporales y bases de datos dinámicas/locales
+# ------------------------------------------------------------------------------
+*.log
+logs/
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+# Archivos temporales de motores embebidos (conservando scripts en database/ y datos en data/)
+*.mv.db
+*.trace.db
+*.sqlite-journal
+*.h2.db
+
+# ------------------------------------------------------------------------------
+# Seguridad y Secretos (Conforme al apartado 10: "No incluir secretos en el repo")
+# ------------------------------------------------------------------------------
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+*.key
+*.pkcs12
+*.p12
+*.jks
+*.keystore
+secrets.properties
