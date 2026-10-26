@@ -22,7 +22,8 @@ Este registro da soporte directo a los criterios de evaluación:
 | Paso | Fecha | Hito / Tarea | Estado | Módulos Implicados |
 | :---: | :---: | :--- | :---: | :--- |
 | **Paso 1** | 22/10/2026 | Inicialización de la estructura de carpetas, `.gitignore` y bitácora | **COMPLETADO** | Todos (AD, PSP, DI, PMDM, SGE, Transversales) |
-| **Paso 2** | *Pendiente* | *Siguiente paso a definir según planificación técnica* | *En cola* | - |
+| **Paso 2** | 26/10/2026 | Diseño del Modelo de Datos Relacional, Diagrama ER y Script DDL | **COMPLETADO** | Acceso a Datos (AD), SGE, PSP |
+| **Paso 3** | *Pendiente* | *Siguiente paso a definir según planificación técnica* | *En cola* | - |
 
 ---
 
@@ -109,4 +110,49 @@ Se ha redactado y aplicado un fichero `.gitignore` exhaustivo adaptado a las tec
 
 ---
 
+### 🔹 Paso 2: Diseño del Modelo Relacional, Diagrama ER y Script DDL
+
+- **Fecha:** 26 de octubre de 2026
+- **Responsable:** Equipo de desarrollo VulnFollowUp
+- **Estado:** ✅ Completado con éxito
+- **Módulos Implicados:** Acceso a Datos (AD), Sistemas de Gestión Empresarial (SGE), Programación de Servicios y Procesos (PSP)
+
+#### 1. Objetivos del paso
+1. Modelar formalmente las entidades requeridas por el enunciado en Tercera Forma Normal (3FN): **usuarios con roles**, **activos**, **vulnerabilidades**, **valoraciones CVSS** y **proveedores TIC**.
+2. Diseñar un diagrama Entidad-Relación visual en sintaxis Mermaid y elaborar el diccionario de datos detallado con tipos, restricciones de clave y nulabilidad.
+3. Generar el script SQL DDL reproducible (`database/schema.sql`) para la inicialización y creación de tablas e índices en el gestor relacional.
+4. Cumplir estrictamente con los requisitos normativos del marco **DORA (Reglamento UE 2022/2554)** y los casos de uso obligatorios (CU1, CU2, CU3, CU4, CU5).
+
+---
+
+#### 2. Entidades Modeladas y Justificación Técnica
+
+| Entidad / Tabla | Módulo Principal | Justificación Técnica y de Negocio |
+| :--- | :---: | :--- |
+| **`users`** | PSP / Seguridad | Almacenamiento seguro de usuarios con perfiles (`ADMIN`, `ANALYST`, `VIEWER`). Contraseñas con hash seguro y salt (BCrypt) sin texto plano (apartado 10). |
+| **`tic_providers`** | SGE (DORA) | Gestión de dependencias de terceros prestadores TIC (artículos de DORA): criticidad, referencia contractual, fecha periódica de revisión y contactos de emergencia. |
+| **`assets`** | AD / SGE | Activos tecnológicos (API, servidor, BBDD) con entorno, responsable técnico y vinculación a proveedor TIC externo (FK). |
+| **`vulnerabilities`** | AD / PSP | Catálogo de vulnerabilidades (CVE / código interno), título, descripción, fechas y ciclo de remediación (`ABIERTA`, `PENDIENTE_REMEDIACION`, `RESUELTA`, `CERRADA`). |
+| **`vulnerability_assets`** | AD | Tabla asociativa que implementa la relación de cardinalidad **N:M** obligatoria: una vulnerabilidad puede afectar a varios activos y un activo puede tener múltiples vulnerabilidades. |
+| **`cvss_assessments`** | AD / PSP | Registro desacoplado de evaluaciones métricas CVSS Base (versiones `3.1` y `4.0`), vector completo, puntuación numérica (0.0 a 10.0) y severidad cualitativa coherente. |
+| **`remediation_comments`** | AD / PSP | Histórico auditable de comentarios y evidencias aportadas durante las transiciones de estado de una vulnerabilidad (CU4 y CU5). |
+| **`audit_logs`** | PSP / Seguridad | Registro inmutable de eventos y operaciones en el sistema para trazabilidad y control de concurrencia. |
+
+---
+
+#### 3. Reglas de Integridad y Optimización Aplicadas
+- **Claves Primarias y Foráneas:** Garantizan la integridad referencial sin permitir registros huérfanos. Se implementan políticas `ON DELETE CASCADE` para tablas dependientes de composición (comentarios y valoraciones de una vulnerabilidad) y `ON DELETE RESTRICT` para evitar borrar proveedores con activos en producción.
+- **Restricciones `CHECK`:** Aseguran que valores como roles (`ADMIN`, `ANALYST`, `VIEWER`), estados de remediación y rangos numéricos de puntuación CVSS (`base_score BETWEEN 0.0 AND 10.0`) sean validados a nivel de base de datos antes de persistir.
+- **Índices de Alto Rendimiento:** Se crean índices específicos en columnas de filtrado frecuente (`status`, `base_score`, `severity`, `provider_id`) para maximizar el rendimiento de las consultas agregadas del Dashboard y los filtros combinados.
+
+---
+
+#### 4. Entregables Generados en este Paso
+1. `database/DIAGRAMA_ER.md`: Documento técnico exhaustivo con el diagrama Mermaid navegable, diccionario de datos y justificaciones de diseño.
+2. `database/schema.sql`: Script DDL estándar y reproducible para la creación de todas las tablas e índices.
+3. Actualización de `BITACORA.md`: Registro documental de trazabilidad.
+
+---
+
 *(Las siguientes entradas se añadirán consecutivamente a medida que se ejecuten los siguientes pasos del proyecto).*
+
