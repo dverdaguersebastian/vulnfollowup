@@ -23,7 +23,8 @@ Este registro da soporte directo a los criterios de evaluación:
 | :---: | :---: | :--- | :---: | :--- |
 | **Paso 1** | 22/10/2026 | Inicialización de la estructura de carpetas, `.gitignore` y bitácora | **COMPLETADO** | Todos (AD, PSP, DI, PMDM, SGE, Transversales) |
 | **Paso 2** | 26/10/2026 | Diseño del Modelo de Datos Relacional, Diagrama ER y Script DDL | **COMPLETADO** | Acceso a Datos (AD), SGE, PSP |
-| **Paso 3** | *Pendiente* | *Siguiente paso a definir según planificación técnica* | *En cola* | - |
+| **Paso 3** | 29/10/2026 | Carga inicial (JSON), configuración JDBC, render ER y análisis DAFO | **COMPLETADO** | AD, SGE, IPE II |
+| **Paso 4** | *Pendiente* | *Siguiente paso a definir según planificación técnica* | *En cola* | - |
 
 ---
 
@@ -154,5 +155,24 @@ Se ha redactado y aplicado un fichero `.gitignore` exhaustivo adaptado a las tec
 
 ---
 
+### 29/10/2026 - Incorporación de datasets iniciales (JSON), configuración de conexión, renderizado del diagrama ER y análisis DAFO
+* **Archivos afectados:** `data/actives.json`, `data/application.properties`, `data/providers.json`, `data/vulnerabilities.json`, `database/Diagrama_ER.png`, `docs/ipe/VulnFollowUp - Plan de Negocio y Analisis Estrategico DAFO.pdf`
+* **Qué se ha hecho:** 
+  1. Se han creado los ficheros de inicialización y carga de datos sintéticos/públicos en formato JSON dentro de `data/`:
+     - `actives.json`: Define los activos iniciales de prueba para el cliente financiero, incluyendo la pasarela `API de pagos` (entorno `PRODUCCION`, vinculada al proveedor ID 1) y el activo interno `Base de datos Clientes` (entorno `PREPRODUCCION`).
+     - `providers.json`: Estructura la ficha del proveedor TIC externo `HostingSur S.L.` con criticidad `ALTA`, contrato `CT-2025-09A`, fecha límite de revisión periódica en diciembre de 2026 y canales de contacto técnico y soporte.
+     - `vulnerabilities.json`: Inicializa el catálogo de amenazas con el registro crítico `CVE-2024-3094` (puerta trasera en XZ Utils), estado inicial `ABIERTA`, valoración CVSS v3.1 con vector `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H`, puntuación Base 10.0, severidad `CRITICA` y mapeo de los activos afectados (`[1, 2]`).
+  2. Se ha creado el archivo de configuración `data/application.properties` con los parámetros de conexión JDBC para Spring Boot (`spring.datasource.url=jdbc:mysql://localhost:3306/vulnfollowup_db`, usuario y contraseña de entorno de desarrollo seguro).
+  3. Se ha incorporado en `database/Diagrama_ER.png` la representación gráfica exportada en imagen de alta resolución del modelo Entidad-Relación relacional diseñado en el Paso 2.
+  4. Se ha incorporado y ubicado en la carpeta correspondiente `docs/ipe/` el documento formal `VulnFollowUp - Plan de Negocio y Analisis Estrategico DAFO.pdf`.
+* **Por qué se ha hecho (Justificación):** 
+  - **Cumplimiento del apartado 4.2 (Carga inicial y registro de información) y Caso de Uso CU1 (Preparar el entorno):** La aplicación requiere disponer de archivos iniciales desacoplados para poblar la base de datos con activos, proveedores y vulnerabilidades sin obligar al usuario a introducirlos manualmente desde formularios en cada despliegue o prueba.
+  - **Cumplimiento normativo DORA y módulo SGE (apartados 4 y 11.5):** La inclusión de `providers.json` y su vinculación con `actives.json` modela de forma efectiva la supervisión de riesgos y dependencias de terceros prestadores de servicios TIC que exige el Reglamento (UE) 2022/2554.
+  - **Entregables de IPE II (apartados 11.8 y 12.2):** El análisis DAFO y plan de negocio constituye una de las evidencias obligatorias para justificar la viabilidad de la plataforma como servicio ante entidades financieras.
+  - **Accesibilidad y visualización documental (Bloque B):** La imagen PNG del diagrama ER asegura la consulta visual directa del esquema de datos para evaluadores y miembros del equipo en cualquier visor sin dependencia del motor de renderizado Mermaid.
+
+---
+
 *(Las siguientes entradas se añadirán consecutivamente a medida que se ejecuten los siguientes pasos del proyecto).*
+
 
