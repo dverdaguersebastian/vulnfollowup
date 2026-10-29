@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "name": "API de pagos",
+    "type": "API",
+    "environment": "PRODUCCION",
+    "manager": "Ana López",
+    "status": "ACTIVO",
+    "provider_id": 1, 
+    "description": "API principal para la pasarela de pagos con tarjeta."
+  },
+  {
+    "id": 2,
+    "name": "Base de datos Clientes",
+    "type": "BBDD",
+    "environment": "PREPRODUCCION",
+    "manager": "Carlos Ruiz",
+    "status": "ACTIVO",
+    "provider_id": null,
+    "description": "Copia sincronizada para entornos de pruebas."
+  }
+]

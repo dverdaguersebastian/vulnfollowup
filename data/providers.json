@@ -1,0 +1,15 @@
+[
+  {
+    "id": 1,
+    "name": "HostingSur S.L.",
+    "service_provided": "Alojamiento Cloud y CDN",
+    "criticality": "ALTA",
+    "contract_ref": "CT-2025-09A",
+    "contract_start_date": "2025-01-15",
+    "contract_review_date": "2026-12-01",
+    "contact_name": "Laura Méndez",
+    "contact_email": "soporte@hostingsur.es",
+    "contact_phone": "+34 900 11 22 33",
+    "is_active": true
+  }
+]

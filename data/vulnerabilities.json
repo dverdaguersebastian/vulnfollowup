@@ -1,0 +1,16 @@
+[
+  {
+    "cve_id": "CVE-2024-3094",
+    "title": "Puerta trasera en XZ Utils",
+    "description": "Explicación detallada de la vulnerabilidad descubierta en la librería...",
+    "status": "ABIERTA", 
+    "reported_date": "2024-03-29",
+    "cvss": {
+      "version": "3.1",
+      "vector_string": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+      "base_score": 10.0,
+      "severity": "CRITICA"
+    },
+    "affected_assets": [1, 2] 
+  }
+]
