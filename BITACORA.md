@@ -24,7 +24,7 @@ Este registro da soporte directo a los criterios de evaluación:
 | **Paso 1** | 22/10/2026 | Inicialización de la estructura de carpetas, `.gitignore` y bitácora | **COMPLETADO** | Todos (AD, PSP, DI, PMDM, SGE, Transversales) |
 | **Paso 2** | 26/10/2026 | Diseño del Modelo de Datos Relacional, Diagrama ER y Script DDL | **COMPLETADO** | Acceso a Datos (AD), SGE, PSP |
 | **Paso 3** | 29/10/2026 | Carga inicial (JSON), configuración JDBC, render ER y análisis DAFO | **COMPLETADO** | AD, SGE, IPE II |
-| **Paso 4** | *Pendiente* | *Siguiente paso a definir según planificación técnica* | *En cola* | - |
+| **Paso 4** | 30/10/2026 | Implementación de la Capa de Persistencia (JPA, DAOs/Repositorios y Filtrado Dinámico Criteria API) | **COMPLETADO** | Acceso a Datos (AD), PSP, SGE |
 
 ---
 
@@ -170,6 +170,36 @@ Se ha redactado y aplicado un fichero `.gitignore` exhaustivo adaptado a las tec
   - **Cumplimiento normativo DORA y módulo SGE (apartados 4 y 11.5):** La inclusión de `providers.json` y su vinculación con `actives.json` modela de forma efectiva la supervisión de riesgos y dependencias de terceros prestadores de servicios TIC que exige el Reglamento (UE) 2022/2554.
   - **Entregables de IPE II (apartados 11.8 y 12.2):** El análisis DAFO y plan de negocio constituye una de las evidencias obligatorias para justificar la viabilidad de la plataforma como servicio ante entidades financieras.
   - **Accesibilidad y visualización documental (Bloque B):** La imagen PNG del diagrama ER asegura la consulta visual directa del esquema de datos para evaluadores y miembros del equipo en cualquier visor sin dependencia del motor de renderizado Mermaid.
+
+---
+
+### 🔹 Paso 4: Implementación de la Capa de Persistencia (Acceso a Datos)
+* **Fecha:** 30 de octubre de 2026
+* **Responsable:** Equipo Backend VulnFollowUp
+* **Estado:** ✅ Completado con éxito
+* **Módulos Implicados:** Acceso a Datos (AD), Programación de Servicios y Procesos (PSP), Sistemas de Gestión Empresarial (SGE)
+* **Archivos afectados:** 
+  - `backend/pom.xml`
+  - `backend/src/main/resources/application.properties`
+  - `backend/src/main/java/es/nebrija/vulnfollowup/model/enums/*` (`Role`, `Criticality`, `Environment`, `AssetStatus`, `VulnerabilityStatus`, `CvssVersion`, `Severity`)
+  - `backend/src/main/java/es/nebrija/vulnfollowup/model/entity/*` (`User`, `TicProvider`, `Asset`, `Vulnerability`, `CvssAssessment`, `RemediationComment`, `AuditLog`)
+  - `backend/src/main/java/es/nebrija/vulnfollowup/repository/*` (`UserRepository`, `TicProviderRepository`, `AssetRepository`, `CvssAssessmentRepository`, `RemediationCommentRepository`, `AuditLogRepository`, `VulnerabilityRepository`)
+  - `backend/src/main/java/es/nebrija/vulnfollowup/repository/specification/*` (`VulnerabilityFilter`, `VulnerabilitySpecification`)
+  - `backend/src/main/java/es/nebrija/vulnfollowup/service/*` (`VulnerabilityService`, `VulnerabilityServiceImpl`)
+  - `backend/src/test/java/es/nebrija/vulnfollowup/repository/VulnerabilityRepositoryTest.java`
+* **Qué se ha hecho:**
+  1. **Elección y configuración tecnológica:** Selección fundamentada de **Spring Data JPA / Hibernate (JPA 3.1 / Jakarta Persistence)** sobre JDBC puro para la gestión de entidades complejas, ciclos de vida y consultas tipadas seguras. Configuración de `pom.xml`, pool HikariCP y propiedades JPA en `application.properties`.
+  2. **Mapeo Objeto-Relacional (ORM):** Creación de las 7 entidades del modelo relacional conforme a `schema.sql` y `DIAGRAMA_ER.md`, asegurando:
+     - Relación N:M entre `Vulnerability` y `Asset` con `@JoinTable` sobre `vulnerability_assets` y métodos helper bidireccionales (`addAsset`, `removeAsset`).
+     - Relaciones 1:N de composición con `CvssAssessment` y `RemediationComment` con cascada total (`CascadeType.ALL`) y `orphanRemoval = true`.
+     - Relaciones N:1 con proveedores TIC (`TicProvider`) y analistas (`User`).
+     - Enums persistidos con `@Enumerated(EnumType.STRING)` alineados con las restricciones `CHECK` DDL.
+  3. **Desacoplamiento mediante Repositorios:** Creación de interfaces de repositorio que extienden `JpaRepository` y `JpaSpecificationExecutor`, aislando el acceso a datos del dominio.
+  4. **Filtrado dinámico seguro con Criteria API:** Creación del DTO inmutable `VulnerabilityFilter` y la especificación `VulnerabilitySpecification`. Permite búsquedas combinando de manera opcional: severidad CVSS, estado de remediación, activo afectado y rango de puntuación Base CVSS, garantizando protección absoluta frente a SQL Injection y control de unicidad (`distinct`).
+  5. **Capa de Servicio y Pruebas Unitarias/Integración:** Implementación de `VulnerabilityService` y suite de pruebas `VulnerabilityRepositoryTest` sobre base de datos en memoria H2.
+* **Por qué se ha hecho (Justificación):**
+  - Cumplimiento de los requisitos de persistencia del módulo de Acceso a Datos (AD) y DORA (trazabilidad y severidad técnica CVSS v3.1/v4.0).
+  - Máxima seguridad operativa (evitando SQL Injection mediante parámetros de `CriteriaBuilder`) y rendimiento óptimo mediante carga perezosa (`FetchType.LAZY`).
 
 ---
 
